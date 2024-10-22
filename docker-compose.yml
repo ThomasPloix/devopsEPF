@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+    backend:
+        build: "/backend/."
+        env_file:
+            -   .env
+        networks:
+            - my-network
+        depends_on:
+            - database
+
+    database:
+        build: "/database/."
+        env_file:
+            -   .env
+        networks:
+            - my-network
+        volumes:
+            - db-data:/var/lib/postgresql/data
+
+    httpd:
+        build: "/Frontend/."
+        ports:
+            - "80:80"
+        networks:
+            - my-network
+        depends_on:
+            - backend
+
+networks:
+    my-network:
+
+volumes:
+    db-data:
